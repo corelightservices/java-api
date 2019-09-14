@@ -4,6 +4,9 @@ import org.json.JSONObject;
 
 import java.time.Instant;
 
+/**
+ * Represents a CLS scoreboard entry.
+ */
 public class CLSScoreboardEntry extends CLSObject {
 
     private int rank;
@@ -23,4 +26,31 @@ public class CLSScoreboardEntry extends CLSObject {
         return instance;
     }
 
+    /**
+     * @return The position at which the entry is ranked in the scoreboard
+     */
+    public int getRank() {
+        return rank;
+    }
+
+    /**
+     * @return The value of the scoreboard entry. This is also used to rank the entry
+     */
+    public double getValue() {
+        return value;
+    }
+
+    /**
+     * @return The player for which the scoreboard entry was recorded
+     */
+    public CLSPlayer getPlayer() {
+        return player;
+    }
+
+    /**
+     * @return The time of insertion
+     */
+    public Instant getTimestamp() {
+        return timestamp;
+    }
 }

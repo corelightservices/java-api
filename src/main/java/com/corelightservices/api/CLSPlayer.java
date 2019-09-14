@@ -2,6 +2,9 @@ package com.corelightservices.api;
 
 import org.json.JSONObject;
 
+/**
+ * Represents a registered player.
+ */
 public class CLSPlayer extends CLSObject {
 
     private String apiReference;
@@ -16,10 +19,16 @@ public class CLSPlayer extends CLSObject {
         return instance;
     }
 
+    /**
+     * @return Key that is used as reference in CLS api requests
+     */
     public String getApiReference() {
         return apiReference;
     }
 
+    /**
+     * @return The players displayed user name
+     */
     public String getName() {
         return name;
     }

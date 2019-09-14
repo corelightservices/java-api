@@ -21,6 +21,11 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Helper class for executing api requests.
+ * To instantiate CLSApiContext you will need an API Key.
+ * You can generate API Keys for your project at <a href="https://corelightservices.com">corelightservices.com</a>.
+ */
 public class CLSApiContext {
     private static String baseUrl = "https://corelightservices.com/api/";
 

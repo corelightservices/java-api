@@ -4,6 +4,9 @@ import org.json.JSONObject;
 
 import java.time.Instant;
 
+/**
+ * Represents a CLS achievement.
+ */
 public class CLSAchievement extends CLSObject {
 
     private String name;
@@ -30,34 +33,58 @@ public class CLSAchievement extends CLSObject {
         return instant;
     }
 
+    /**
+     * @return The achievements name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return The achievements description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * @return The achievements icon
+     */
     public String getIcon() {
         return icon;
     }
 
+    /**
+     * @return True, if this achievement can be awarded multiple times
+     */
     public boolean isAllowMultiple() {
         return allowMultiple;
     }
 
+    /**
+     * @return Achievement type (Event / Progress)
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * @return Progress goal for progress achievements
+     */
     public double getTargetProgress() {
         return targetProgress;
     }
 
+    /**
+     * @return Key that is used as reference in CLS api requests.
+     */
     public String getApiReference() {
         return apiReference;
     }
 
+    /**
+     * @return Time of creation
+     */
     public Instant getTimestampCreate() {
         return timestampCreate;
     }
