@@ -7,7 +7,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,6 +29,7 @@ public class CLSApiContext {
     /**
      * Constructor
      * @param apiKey The projects API-Key
+     * @throws CLSInvalidApiKeyException if the provided api key is not a valid key
      */
     public CLSApiContext(String apiKey) throws CLSInvalidApiKeyException {
         if (Utils.stringEmpty(apiKey) || apiKey.length() != 36) throw new CLSInvalidApiKeyException();
@@ -53,6 +56,8 @@ public class CLSApiContext {
     /**
      * Requests information about the project the API key was generated for.
      * @return The requestet project
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSProject GetProject() throws IOException, CLSApiException {
         return ApiResultRequest("project", RequestJson(), "project", CLSProject::create);
@@ -60,8 +65,10 @@ public class CLSApiContext {
 
     /**
      * Requests information about a specific player.
-     * @param playerApiReference
+     * @param playerApiReference The CLS player api-reference
      * @return The requestet player
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSPlayer GetPlayer(String playerApiReference) throws IOException, CLSApiException {
         ValidateReference(playerApiReference, "playerApiReference");
@@ -84,6 +91,8 @@ public class CLSApiContext {
      * Registers a new player with username at CLS.
      * @param playerName The players user name
      * @return The registered player
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSPlayer RegisterPlayer(String playerName) throws IOException, CLSApiException {
         JSONObject json = RequestJson();
@@ -98,6 +107,8 @@ public class CLSApiContext {
      * @param playerApiReference The CLS player api-reference
      * @param playerName The players new user name
      * @return The updated player
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSPlayer UpdatePlayer(String playerApiReference, String playerName) throws IOException, CLSApiException {
         JSONObject json = RequestJson();
@@ -112,6 +123,8 @@ public class CLSApiContext {
      * @param player The CLS player
      * @param playerName The players new user name
      * @return The updated player
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSPlayer UpdatePlayer(CLSPlayer player, String playerName) throws IOException, CLSApiException {
         return UpdatePlayer(player.getApiReference(), playerName);
@@ -122,6 +135,8 @@ public class CLSApiContext {
      * @param scoreboardApiReference The CLS scoreboard api-reference
      * @param limit Defines how many records should be queried (1 &lt;= limit &lt;= 1000)
      * @return The requestet scoreboard including it's records
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSScoreboard GetScoreboardResults(String scoreboardApiReference, int limit) throws IOException, CLSApiException {
         ValidateReference(scoreboardApiReference, "scoreboardApiReference");
@@ -139,6 +154,8 @@ public class CLSApiContext {
      * @param player The CLS player that should be referenced by the record
      * @param value The value of the scoreboard entry (eg. the players score)
      * @return The created scoreboard entry
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSScoreboardEntry InsertScoreboardRecord(String scoreboardApiReference, CLSPlayer player, double value) throws IOException, CLSApiException {
         if (player == null) throw new NullPointerException("player must not be null");
@@ -151,6 +168,8 @@ public class CLSApiContext {
      * @param playerApiReference The api-reference of the CLS player that should be referenced by the record
      * @param value The value of the scoreboard entry (eg. the players score)
      * @return The created scoreboard entry
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSScoreboardEntry InsertScoreboardRecord(String scoreboardApiReference, String playerApiReference, double value) throws IOException, CLSApiException {
         ValidateReference(scoreboardApiReference, "scoreboardApiReference");
@@ -168,6 +187,8 @@ public class CLSApiContext {
      * Requests information about a specific achievement.
      * @param achievementApiReference The CLS achievement api-reference
      * @return The requestet achievement
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSAchievement GetAchievement(String achievementApiReference) throws IOException, CLSApiException {
         ValidateReference(achievementApiReference, "achievementApiReference");
@@ -181,6 +202,8 @@ public class CLSApiContext {
     /**
      * Requests information about all achievements.
      * @return The requestet achievement
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public List<CLSAchievement> GetAchievements() throws IOException, CLSApiException {
         JSONObject json = RequestJson();
@@ -191,6 +214,8 @@ public class CLSApiContext {
      * Convenience override for GetAchievementClaims(playerApiReference, null)
      * @param playerApiReference The CLS player api-reference
      * @return The requestet achievement claims
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public  List<CLSAchievementClaim> GetAchievementClaims(String playerApiReference) throws IOException, CLSApiException {
         return GetAchievementClaims(playerApiReference, null);
@@ -202,6 +227,8 @@ public class CLSApiContext {
      * @param playerApiReference The CLS player api-reference
      * @param achievementApiReference The CLS achievement api-reference
      * @return The requestet achievement claims
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public  List<CLSAchievementClaim> GetAchievementClaims(String playerApiReference, String achievementApiReference) throws IOException, CLSApiException {
         ValidateReference(playerApiReference, "playerApiReference");
@@ -222,6 +249,8 @@ public class CLSApiContext {
      * @param playerApiReference The CLS player api-reference
      * @param achievementApiReference The CLS achievement api-reference
      * @return The requestet achievement claim
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public  CLSAchievementClaim ClaimAchievement(String playerApiReference, String achievementApiReference) throws IOException, CLSApiException {
         return ClaimAchievement(playerApiReference, achievementApiReference, null);
@@ -233,6 +262,8 @@ public class CLSApiContext {
      * @param achievementApiReference The CLS achievement api-reference
      * @param progress The progress that will be added to the current achievement progress <i>(should be null for event achievements and greater than 0 for progress achievements)
      * @return The requestet achievement claim
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSAchievementClaim ClaimAchievement(String playerApiReference, String achievementApiReference, Double progress) throws IOException, CLSApiException {
         ValidateReference(playerApiReference, "playerApiReference");
@@ -290,35 +321,36 @@ public class CLSApiContext {
     }
 
     private static JSONObject ApiRequest(String url, JSONObject content) throws CLSApiException, IOException {
-        HttpClient client = new DefaultHttpClient();
-        StringEntity requestEntity = new StringEntity(
-                content.toString(),
-                ContentType.APPLICATION_JSON);
+        try(CloseableHttpClient client = HttpClientBuilder.create().build()) {
+            StringEntity requestEntity = new StringEntity(
+                    content.toString(),
+                    ContentType.APPLICATION_JSON);
 
-        HttpPost postMethod = new HttpPost(url);
-        postMethod.setEntity(requestEntity);
+            HttpPost postMethod = new HttpPost(url);
+            postMethod.setEntity(requestEntity);
 
-        HttpResponse rawResponse = client.execute(postMethod);
-        if(rawResponse.getStatusLine().getStatusCode() != 200)
-            throw new CLSInvalidResponseException();
+            HttpResponse rawResponse = client.execute(postMethod);
+            if (rawResponse.getStatusLine().getStatusCode() != 200)
+                throw new CLSInvalidResponseException();
 
-        HttpEntity entity = rawResponse.getEntity();
-        JSONObject resultJson = new JSONObject(IOUtils.toString(entity.getContent(), Charset.forName("UTF-8")));
-        if (resultJson.has("success") && !resultJson.getBoolean("success"))
-        {
-            if (resultJson.has("error"))
-                throw ParseErrorException(resultJson.getString("error"));
+            HttpEntity entity = rawResponse.getEntity();
+            JSONObject resultJson = new JSONObject(IOUtils.toString(entity.getContent(), Charset.forName("UTF-8")));
+            if (resultJson.has("success") && !resultJson.getBoolean("success")) {
+                if (resultJson.has("error"))
+                    throw ParseErrorException(resultJson.getString("error"));
 
-            throw new CLSApiException("API request failed.");
+                throw new CLSApiException("API request failed.");
+            }
+
+            return resultJson;
         }
-
-        return resultJson;
     }
 
     private static void ValidateReference(String apiReference, String referenceName)
     {
         if (Utils.stringEmpty(apiReference)) throw new IllegalArgumentException("ApiReference '"+referenceName+"' must be non null or whitespace.");
         try {
+            //noinspection ResultOfMethodCallIgnored
             UUID.fromString(apiReference);
         }catch (IllegalArgumentException ignore) {
             throw new IllegalArgumentException("ApiReference '"+referenceName+"' is not valid.");
