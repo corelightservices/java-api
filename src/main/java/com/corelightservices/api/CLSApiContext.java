@@ -87,6 +87,8 @@ public class CLSApiContext {
     /**
      * Registers a new player at CLS.
      * @return The registered player
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSPlayer RegisterPlayer() throws IOException, CLSApiException {
         return RegisterPlayer(null);
@@ -265,7 +267,7 @@ public class CLSApiContext {
      * Awards an event achievement to a player or updates progress on a progress achievement.
      * @param playerApiReference The CLS player api-reference
      * @param achievementApiReference The CLS achievement api-reference
-     * @param progress The progress that will be added to the current achievement progress <i>(should be null for event achievements and greater than 0 for progress achievements)
+     * @param progress The progress that will be added to the current achievement progress <i>(should be null for event achievements and greater than 0 for progress achievements)</i>
      * @return The requestet achievement claim
      * @throws IOException if api request failed on a network level
      * @throws CLSApiException if the api reports an error or returns an invalid response
