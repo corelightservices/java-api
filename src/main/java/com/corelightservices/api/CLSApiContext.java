@@ -140,7 +140,7 @@ public class CLSApiContext {
     /**
      * Requests scoreboard results.
      * @param scoreboardApiReference The CLS scoreboard api-reference
-     * @param limit Defines the offset for the entry query (0 &lt; offset)
+     * @param limit Defines the offset for the entry query (0 &lt;= offset)
      * @param limit Defines how many records should be queried (1 &lt;= limit &lt;= 1000)
      * @return The requestet scoreboard including it's records
      * @throws IOException if api request failed on a network level
