@@ -148,7 +148,7 @@ public class CLSApiContext {
      */
     public CLSScoreboard GetScoreboardResults(String scoreboardApiReference, int offset, int limit) throws IOException, CLSApiException {
         ValidateReference(scoreboardApiReference, "scoreboardApiReference");
-        if (offset < 1) throw new IllegalArgumentException("Offset must have a value greater than 0.");
+        if (offset < 0) throw new IllegalArgumentException("Offset must have a value greater or equal to 0.");
         if (limit < 1 || limit > 1000) throw new IllegalArgumentException("Limit must have a value between 1 and 1000.");
 
         JSONObject json = RequestJson();
@@ -171,7 +171,7 @@ public class CLSApiContext {
     public CLSScoreboard GetScoreboardResults(String scoreboardApiReference, String playerApiReference, int offset, int limit) throws IOException, CLSApiException {
         ValidateReference(scoreboardApiReference, "scoreboardApiReference");
         ValidateReference(playerApiReference, "playerApiReference");
-        if (offset < 1) throw new IllegalArgumentException("Offset must have a value greater than 0.");
+        if (offset < 0) throw new IllegalArgumentException("Offset must have a value greater or equal to 0.");
         if (limit < 1 || limit > 1000) throw new IllegalArgumentException("Limit must have a value between 1 and 1000.");
 
         JSONObject json = RequestJson();
