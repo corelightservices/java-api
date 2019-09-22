@@ -15,6 +15,8 @@ public class CLSScoreboard extends CLSObject {
     private String apiReference;
     private String name;
     private String description;
+    private int totalEntries;
+    private Boolean playerUnique;
     private List<CLSScoreboardEntry> entries;
 
     private CLSScoreboard() {}
@@ -24,6 +26,8 @@ public class CLSScoreboard extends CLSObject {
         instance.apiReference = object.getString("apiReference");
         instance.name = object.getString("name");
         instance.description = object.getString("description");
+        instance.totalEntries = object.getInt("totalEntries");
+        instance.playerUnique = object.getBoolean("playerUnique");
         JSONArray entries = object.getJSONArray("entries");
         instance.entries = entries.toList().stream().map(e->CLSScoreboardEntry.create((JSONObject) e)).collect(Collectors.toList());
         return instance;
@@ -48,6 +52,20 @@ public class CLSScoreboard extends CLSObject {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * @return The count of total entries in this scoreboard
+     */
+    public int getTotalEntries() {
+        return totalEntries;
+    }
+
+    /**
+     * @return True, if entries are unique per player
+     */
+    public Boolean getPlayerUnique() {
+        return playerUnique;
     }
 
     /**

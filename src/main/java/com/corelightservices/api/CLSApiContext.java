@@ -140,16 +140,43 @@ public class CLSApiContext {
     /**
      * Requests scoreboard results.
      * @param scoreboardApiReference The CLS scoreboard api-reference
+     * @param limit Defines the offset for the entry query (0 &lt; offset)
      * @param limit Defines how many records should be queried (1 &lt;= limit &lt;= 1000)
      * @return The requestet scoreboard including it's records
      * @throws IOException if api request failed on a network level
      * @throws CLSApiException if the api reports an error or returns an invalid response
      */
-    public CLSScoreboard GetScoreboardResults(String scoreboardApiReference, int limit) throws IOException, CLSApiException {
+    public CLSScoreboard GetScoreboardResults(String scoreboardApiReference, int offset, int limit) throws IOException, CLSApiException {
         ValidateReference(scoreboardApiReference, "scoreboardApiReference");
+        if (offset < 1) throw new IllegalArgumentException("Offset must have a value greater than 0.");
         if (limit < 1 || limit > 1000) throw new IllegalArgumentException("Limit must have a value between 1 and 1000.");
 
         JSONObject json = RequestJson();
+        json.put("Offset", offset);
+        json.put("Limit", limit);
+
+        return ApiResultRequest("scoreboard/" + scoreboardApiReference + "/results", json, "scoreboard", CLSScoreboard::create);
+    }
+
+    /**
+     * Requests scoreboard results for a specific player.
+     * @param scoreboardApiReference The CLS scoreboard api-reference
+     * @param playerApiReference The CLS player api-reference
+     * @param limit Defines the offset for the entry query (0 &lt; offset)
+     * @param limit Defines how many records should be queried (1 &lt;= limit &lt;= 1000)
+     * @return The requestet scoreboard including it's records
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
+     */
+    public CLSScoreboard GetScoreboardResults(String scoreboardApiReference, String playerApiReference, int offset, int limit) throws IOException, CLSApiException {
+        ValidateReference(scoreboardApiReference, "scoreboardApiReference");
+        ValidateReference(playerApiReference, "playerApiReference");
+        if (offset < 1) throw new IllegalArgumentException("Offset must have a value greater than 0.");
+        if (limit < 1 || limit > 1000) throw new IllegalArgumentException("Limit must have a value between 1 and 1000.");
+
+        JSONObject json = RequestJson();
+        json.put("playerReference", playerApiReference);
+        json.put("Offset", offset);
         json.put("Limit", limit);
 
         return ApiResultRequest("scoreboard/" + scoreboardApiReference + "/results", json, "scoreboard", CLSScoreboard::create);
