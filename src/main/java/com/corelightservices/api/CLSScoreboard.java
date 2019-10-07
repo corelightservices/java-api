@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  */
 public class CLSScoreboard extends CLSObject {
 
-    private String apiReference;
+    private String scoreboardApiReference;
     private String name;
     private String description;
     private int totalEntries;
@@ -23,7 +23,7 @@ public class CLSScoreboard extends CLSObject {
 
     static CLSScoreboard create(JSONObject object) {
         CLSScoreboard instance = new CLSScoreboard();
-        instance.apiReference = object.getString("apiReference");
+        instance.scoreboardApiReference = object.getString("scoreboardReference");
         instance.name = object.getString("name");
         instance.description = object.getString("description");
         instance.totalEntries = object.getInt("totalEntries");
@@ -36,8 +36,8 @@ public class CLSScoreboard extends CLSObject {
     /**
      * @return Key that is used as reference in CLS api requests
      */
-    public String getApiReference() {
-        return apiReference;
+    public String getScoreboardApiReference() {
+        return scoreboardApiReference;
     }
 
     /**

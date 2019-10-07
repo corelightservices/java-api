@@ -8,7 +8,7 @@ import java.time.Instant;
  */
 public class CLSProject extends CLSObject {
 
-    private String apiReference;
+    private String projectApiReference;
     private String name;
     private String description;
     private Instant timestampCreate;
@@ -17,7 +17,7 @@ public class CLSProject extends CLSObject {
 
     static CLSProject create(JSONObject object) {
         CLSProject instance = new CLSProject();
-        instance.apiReference = object.getString("apiReference");
+        instance.projectApiReference = object.getString("projectReference");
         instance.name = object.getString("name");
         instance.description = object.getString("description");
         instance.timestampCreate = Utils.time(object.getString("timestampCreate"));
@@ -27,8 +27,8 @@ public class CLSProject extends CLSObject {
     /**
      * @return Key that is used as reference in CLS api requests
      */
-    public String getApiReference() {
-        return apiReference;
+    public String getProjectApiReference() {
+        return projectApiReference;
     }
 
     /**

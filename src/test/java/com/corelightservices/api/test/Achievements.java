@@ -85,7 +85,7 @@ public class Achievements extends CLSApiTest {
 
         try
         {
-            claim = apiContext.ClaimAchievement(PlayerReference, EventReference);
+            claim = apiContext.ClaimAchievement(PlayerReference, PlayerKey, EventReference);
             Assert.assertNotNull(claim);
             Assert.assertEquals(PlayerReference, claim.getPlayerApiReference());
             Assert.assertEquals(EventReference, claim.getAchievementApiReference());
@@ -96,14 +96,14 @@ public class Achievements extends CLSApiTest {
                 throw exception;
         }
 
-        claim = apiContext.ClaimAchievement(PlayerReference, EventMultipleReference);
+        claim = apiContext.ClaimAchievement(PlayerReference, PlayerKey, EventMultipleReference);
         Assert.assertNotNull(claim);
         Assert.assertEquals(PlayerReference, claim.getPlayerApiReference());
         Assert.assertEquals(EventMultipleReference, claim.getAchievementApiReference());
 
         try
         {
-            claim = apiContext.ClaimAchievement(PlayerReference, ProgressReference, 1.0);
+            claim = apiContext.ClaimAchievement(PlayerReference, PlayerKey, ProgressReference, 1.0);
             Assert.assertNotNull(claim);
             Assert.assertEquals(PlayerReference, claim.getPlayerApiReference());
             Assert.assertEquals(ProgressReference, claim.getAchievementApiReference());
@@ -114,7 +114,7 @@ public class Achievements extends CLSApiTest {
                 throw exception;
         }
 
-        claim = apiContext.ClaimAchievement(PlayerReference, ProgressMultipleReference, 1.0);
+        claim = apiContext.ClaimAchievement(PlayerReference, PlayerKey, ProgressMultipleReference, 1.0);
         Assert.assertNotNull(claim);
         Assert.assertEquals(PlayerReference, claim.getPlayerApiReference());
         Assert.assertEquals(ProgressMultipleReference, claim.getAchievementApiReference());

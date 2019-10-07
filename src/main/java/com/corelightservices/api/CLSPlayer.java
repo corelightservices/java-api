@@ -7,23 +7,33 @@ import org.json.JSONObject;
  */
 public class CLSPlayer extends CLSObject {
 
-    private String apiReference;
+    private String playerApiReference;
     private String name;
+    private String playerKey;
 
     private CLSPlayer() {}
 
     static CLSPlayer create(JSONObject object) {
         CLSPlayer instance = new CLSPlayer();
-        instance.apiReference = object.getString("apiReference");
+        instance.playerApiReference = object.getString("playerReference");
         instance.name = object.getString("name");
+        if(object.has("playerKey"))
+            instance.playerKey = object.getString("playerKey");
         return instance;
     }
 
     /**
      * @return Key that is used as reference in CLS api requests
      */
-    public String getApiReference() {
-        return apiReference;
+    public String getPlayerApiReference() {
+        return playerApiReference;
+    }
+
+    /**
+     * @return Key that is used to authenticate the player against the CLS api.
+     */
+    public String getPlayerKey() {
+        return playerKey;
     }
 
     /**

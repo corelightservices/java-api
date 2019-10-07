@@ -77,7 +77,7 @@ public class CLSApiContext {
         ValidateReference(playerApiReference, "playerApiReference");
 
         JSONObject json = RequestJson();
-        json.put("ApiReference", playerApiReference);
+        json.put("PlayerReference", playerApiReference);
 
         return ApiResultRequest("player", json, "player", CLSPlayer::create);
     }
@@ -108,23 +108,28 @@ public class CLSApiContext {
     }
 
     /**
-     * Registers a new player at CLS.
+     * Updates player information at CLS.
      * @param playerApiReference The CLS player api-reference
+     * @param playerKey The CLS player authentication key
      * @param playerName The players new user name
      * @return The updated player
      * @throws IOException if api request failed on a network level
      * @throws CLSApiException if the api reports an error or returns an invalid response
      */
-    public CLSPlayer UpdatePlayer(String playerApiReference, String playerName) throws IOException, CLSApiException {
+    public CLSPlayer UpdatePlayer(String playerApiReference, String playerKey, String playerName) throws IOException, CLSApiException {
+        ValidateReference(playerApiReference, "playerApiReference");
+
         JSONObject json = RequestJson();
-        json.put("ApiReference", playerApiReference);
+        json.put("PlayerReference", playerApiReference);
+        json.put("PlayerKey", playerKey);
         json.put("Name", playerName);
 
         return ApiResultRequest("player/update", json, "player", CLSPlayer::create);
     }
 
     /**
-     * Registers a new player at CLS.
+     * Updates player information at CLS.
+     * The CLSPlayer object must contain valid api-reference and player key.
      * @param player The CLS player
      * @param playerName The players new user name
      * @return The updated player
@@ -132,7 +137,7 @@ public class CLSApiContext {
      * @throws CLSApiException if the api reports an error or returns an invalid response
      */
     public CLSPlayer UpdatePlayer(CLSPlayer player, String playerName) throws IOException, CLSApiException {
-        return UpdatePlayer(player.getApiReference(), playerName);
+        return UpdatePlayer(player.getPlayerApiReference(), player.getPlayerKey(), playerName);
     }
 
     /**
@@ -146,6 +151,7 @@ public class CLSApiContext {
      */
     public CLSScoreboard GetScoreboardResults(String scoreboardApiReference, int offset, int limit) throws IOException, CLSApiException {
         ValidateReference(scoreboardApiReference, "scoreboardApiReference");
+
         if (offset < 0) throw new IllegalArgumentException("Offset must have a value greater or equal to 0.");
         if (limit < 1 || limit > 1000) throw new IllegalArgumentException("Limit must have a value between 1 and 1000.");
 
@@ -169,11 +175,12 @@ public class CLSApiContext {
     public CLSScoreboard GetScoreboardResults(String scoreboardApiReference, String playerApiReference, int offset, int limit) throws IOException, CLSApiException {
         ValidateReference(scoreboardApiReference, "scoreboardApiReference");
         ValidateReference(playerApiReference, "playerApiReference");
+
         if (offset < 0) throw new IllegalArgumentException("Offset must have a value greater or equal to 0.");
         if (limit < 1 || limit > 1000) throw new IllegalArgumentException("Limit must have a value between 1 and 1000.");
 
         JSONObject json = RequestJson();
-        json.put("playerReference", playerApiReference);
+        json.put("PlayerReference", playerApiReference);
         json.put("Offset", offset);
         json.put("Limit", limit);
 
@@ -181,7 +188,24 @@ public class CLSApiContext {
     }
 
     /**
+     * Requests information about a specific scoreboard.
+     * @param scoreboardApiReference The CLS scoreboard api-reference
+     * @return The requestet scoreboard
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
+     */
+    public CLSScoreboard GetScoreboard(String scoreboardApiReference) throws IOException, CLSApiException {
+        ValidateReference(scoreboardApiReference, "scoreboardApiReference");
+
+        JSONObject json = RequestJson();
+        json.put("ScoreboardReference", scoreboardApiReference);
+
+        return ApiResultRequest("scoreboard", json, "scoreboard", CLSScoreboard::create);
+    }
+
+    /**
      * Records a new scoreboard entry.
+     * The CLSPlayer object must contain valid api-reference and player key.
      * @param scoreboardApiReference The CLS scoreboard api-reference
      * @param player The CLS player that should be referenced by the record
      * @param value The value of the scoreboard entry (eg. the players score)
@@ -191,24 +215,26 @@ public class CLSApiContext {
      */
     public CLSScoreboardEntry InsertScoreboardRecord(String scoreboardApiReference, CLSPlayer player, double value) throws IOException, CLSApiException {
         if (player == null) throw new NullPointerException("player must not be null");
-        return InsertScoreboardRecord(scoreboardApiReference, player.getApiReference(), value);
+        return InsertScoreboardRecord(scoreboardApiReference, player.getPlayerApiReference(), player.getPlayerKey(), value);
     }
 
     /**
      * Records a new scoreboard entry.
      * @param scoreboardApiReference The CLS scoreboard api-reference
      * @param playerApiReference The api-reference of the CLS player that should be referenced by the record
+     * @param playerKey The CLS player authentication key
      * @param value The value of the scoreboard entry (eg. the players score)
      * @return The created scoreboard entry
      * @throws IOException if api request failed on a network level
      * @throws CLSApiException if the api reports an error or returns an invalid response
      */
-    public CLSScoreboardEntry InsertScoreboardRecord(String scoreboardApiReference, String playerApiReference, double value) throws IOException, CLSApiException {
+    public CLSScoreboardEntry InsertScoreboardRecord(String scoreboardApiReference, String playerApiReference, String playerKey, double value) throws IOException, CLSApiException {
         ValidateReference(scoreboardApiReference, "scoreboardApiReference");
         ValidateReference(playerApiReference, "playerApiReference");
 
         JSONObject json = RequestJson();
         json.put("PlayerReference", playerApiReference);
+        json.put("PlayerKey", playerKey);
         json.put("Value", value);
         json.put("Timestamp", Clock.systemUTC().instant().toString());
 
@@ -243,7 +269,7 @@ public class CLSApiContext {
     }
 
     /**
-     * Convenience override for GetAchievementClaims(playerApiReference, null)
+     * Convenience overload for GetAchievementClaims(playerApiReference, null)
      * @param playerApiReference The CLS player api-reference
      * @return The requestet achievement claims
      * @throws IOException if api request failed on a network level
@@ -277,15 +303,15 @@ public class CLSApiContext {
     }
 
     /**
-     * Convenience override for ClaimAchievement(playerApiReference, achievementApiReference, null)
+     * Convenience overload for ClaimAchievement(playerApiReference, achievementApiReference, null)
      * @param playerApiReference The CLS player api-reference
      * @param achievementApiReference The CLS achievement api-reference
      * @return The requestet achievement claim
      * @throws IOException if api request failed on a network level
      * @throws CLSApiException if the api reports an error or returns an invalid response
      */
-    public  CLSAchievementClaim ClaimAchievement(String playerApiReference, String achievementApiReference) throws IOException, CLSApiException {
-        return ClaimAchievement(playerApiReference, achievementApiReference, null);
+    public  CLSAchievementClaim ClaimAchievement(String playerApiReference, String playerKey, String achievementApiReference) throws IOException, CLSApiException {
+        return ClaimAchievement(playerApiReference, playerKey, achievementApiReference, null);
     }
 
     /**
@@ -297,12 +323,13 @@ public class CLSApiContext {
      * @throws IOException if api request failed on a network level
      * @throws CLSApiException if the api reports an error or returns an invalid response
      */
-    public CLSAchievementClaim ClaimAchievement(String playerApiReference, String achievementApiReference, Double progress) throws IOException, CLSApiException {
+    public CLSAchievementClaim ClaimAchievement(String playerApiReference, String playerKey, String achievementApiReference, Double progress) throws IOException, CLSApiException {
         ValidateReference(playerApiReference, "playerApiReference");
         ValidateReference(achievementApiReference, "achievementApiReference");
 
         JSONObject json = RequestJson();
         json.put("PlayerReference", playerApiReference);
+        json.put("PlayerKey", playerKey);
         json.put("AchievementReference", achievementApiReference);
         if(progress != null)
             json.put("Progress", progress);

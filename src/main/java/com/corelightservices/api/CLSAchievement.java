@@ -15,7 +15,7 @@ public class CLSAchievement extends CLSObject {
     private boolean allowMultiple;
     private String type;
     private double targetProgress;
-    private String apiReference;
+    private String achievementApiReference;
     private Instant timestampCreate;
 
     private CLSAchievement() {}
@@ -28,7 +28,7 @@ public class CLSAchievement extends CLSObject {
         instant.allowMultiple = object.getBoolean("allowMultiple");
         instant.type = object.getString("type");
         instant.targetProgress = object.getDouble("targetProgress");
-        instant.apiReference = object.getString("apiReference");
+        instant.achievementApiReference = object.getString("achievementReference");
         instant.timestampCreate = Utils.time(object.getString("timestampCreate"));
         return instant;
     }
@@ -78,8 +78,8 @@ public class CLSAchievement extends CLSObject {
     /**
      * @return Key that is used as reference in CLS api requests.
      */
-    public String getApiReference() {
-        return apiReference;
+    public String getAchievementApiReference() {
+        return achievementApiReference;
     }
 
     /**
