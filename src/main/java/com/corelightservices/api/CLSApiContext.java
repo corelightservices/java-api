@@ -143,7 +143,7 @@ public class CLSApiContext {
     /**
      * Requests scoreboard results.
      * @param scoreboardApiReference The CLS scoreboard api-reference
-     * @param limit Defines the offset for the entry query (0 &lt;= offset)
+     * @param offset Defines the offset for the entry query (0 &lt;= offset)
      * @param limit Defines how many records should be queried (1 &lt;= limit &lt;= 1000)
      * @return The requestet scoreboard including it's records
      * @throws IOException if api request failed on a network level
@@ -166,7 +166,7 @@ public class CLSApiContext {
      * Requests scoreboard results for a specific player.
      * @param scoreboardApiReference The CLS scoreboard api-reference
      * @param playerApiReference The CLS player api-reference
-     * @param limit Defines the offset for the entry query (0 &lt; offset)
+     * @param offset Defines the offset for the entry query (0 &lt; offset)
      * @param limit Defines how many records should be queried (1 &lt;= limit &lt;= 1000)
      * @return The requestet scoreboard including it's records
      * @throws IOException if api request failed on a network level
@@ -305,6 +305,7 @@ public class CLSApiContext {
     /**
      * Convenience overload for ClaimAchievement(playerApiReference, achievementApiReference, null)
      * @param playerApiReference The CLS player api-reference
+     * @param playerKey The CLS player authentication key
      * @param achievementApiReference The CLS achievement api-reference
      * @return The requestet achievement claim
      * @throws IOException if api request failed on a network level
@@ -317,6 +318,7 @@ public class CLSApiContext {
     /**
      * Awards an event achievement to a player or updates progress on a progress achievement.
      * @param playerApiReference The CLS player api-reference
+     * @param playerKey The CLS player authentication key
      * @param achievementApiReference The CLS achievement api-reference
      * @param progress The progress that will be added to the current achievement progress <i>(should be null for event achievements and greater than 0 for progress achievements)</i>
      * @return The requestet achievement claim
