@@ -108,6 +108,34 @@ public class CLSApiContext {
     }
 
     /**
+     * Reports player activity for project analytics.
+     * @param playerApiReference The CLS player api-reference
+     * @param playerKey The CLS player authentication key
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
+     */
+    public void ReportPlayerActivity(String playerApiReference, String playerKey) throws IOException, CLSApiException {
+        ValidateReference(playerApiReference, "playerApiReference");
+
+        JSONObject json = RequestJson();
+        json.put("PlayerReference", playerApiReference);
+        json.put("PlayerKey", playerKey);
+
+        ApiRequest("player/active", json);
+    }
+
+    /**
+     * Reports player activity for project analytics.
+     * The CLSPlayer object must contain a valid api-reference and player key.
+     * @param player The CLS player
+     * @throws IOException if api request failed on a network level
+     * @throws CLSApiException if the api reports an error or returns an invalid response
+     */
+    public void ReportPlayerActivity(CLSPlayer player) throws IOException, CLSApiException {
+        ReportPlayerActivity(player.getPlayerApiReference(), player.getPlayerKey());
+    }
+
+    /**
      * Updates player information at CLS.
      * @param playerApiReference The CLS player api-reference
      * @param playerKey The CLS player authentication key
@@ -129,7 +157,7 @@ public class CLSApiContext {
 
     /**
      * Updates player information at CLS.
-     * The CLSPlayer object must contain valid api-reference and player key.
+     * The CLSPlayer object must contain a valid api-reference and player key.
      * @param player The CLS player
      * @param playerName The players new user name
      * @return The updated player
@@ -205,7 +233,7 @@ public class CLSApiContext {
 
     /**
      * Records a new scoreboard entry.
-     * The CLSPlayer object must contain valid api-reference and player key.
+     * The CLSPlayer object must contain a valid api-reference and player key.
      * @param scoreboardApiReference The CLS scoreboard api-reference
      * @param player The CLS player that should be referenced by the record
      * @param value The value of the scoreboard entry (eg. the players score)

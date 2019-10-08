@@ -6,7 +6,7 @@
 
     <groupId>com.corelightservices</groupId>
     <artifactId>corelightservices-java-api</artifactId>
-    <version>1.3.1.1</version>
+    <version>1.4.1.0</version>
 
     <name>CoreLight Services API</name>
     <description>Official CoreLight Services Java API wrapper</description>
