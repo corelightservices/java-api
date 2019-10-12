@@ -136,36 +136,39 @@ public class CLSApiContext {
     }
 
     /**
-     * Updates player information at CLS.
+     * Updates player name or country code at CLS.
      * @param playerApiReference The CLS player api-reference
      * @param playerKey The CLS player authentication key
-     * @param playerName The players new user name
+     * @param playerName The players new user name (set to null if you don't want to change this property)
+     * @param countryCode The players new country code (set to null if you don't want to change this property)
      * @return The updated player
      * @throws IOException if api request failed on a network level
      * @throws CLSApiException if the api reports an error or returns an invalid response
      */
-    public CLSPlayer UpdatePlayer(String playerApiReference, String playerKey, String playerName) throws IOException, CLSApiException {
+    public CLSPlayer UpdatePlayer(String playerApiReference, String playerKey, String playerName, String countryCode) throws IOException, CLSApiException {
         ValidateReference(playerApiReference, "playerApiReference");
 
         JSONObject json = RequestJson();
         json.put("PlayerReference", playerApiReference);
         json.put("PlayerKey", playerKey);
         json.put("Name", playerName);
+        json.put("CountryCode", countryCode);
 
         return ApiResultRequest("player/update", json, "player", CLSPlayer::create);
     }
 
     /**
-     * Updates player information at CLS.
+     * Updates player name or country code at CLS.
      * The CLSPlayer object must contain a valid api-reference and player key.
      * @param player The CLS player
-     * @param playerName The players new user name
+     * @param playerName The players new user name (set to null if you don't want to change this property)
+     * @param countryCode The players new country code (set to null if you don't want to change this property)
      * @return The updated player
      * @throws IOException if api request failed on a network level
      * @throws CLSApiException if the api reports an error or returns an invalid response
      */
-    public CLSPlayer UpdatePlayer(CLSPlayer player, String playerName) throws IOException, CLSApiException {
-        return UpdatePlayer(player.getPlayerApiReference(), player.getPlayerKey(), playerName);
+    public CLSPlayer UpdatePlayer(CLSPlayer player, String playerName, String countryCode) throws IOException, CLSApiException {
+        return UpdatePlayer(player.getPlayerApiReference(), player.getPlayerKey(), playerName, countryCode);
     }
 
     /**

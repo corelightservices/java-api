@@ -32,6 +32,7 @@ public class General extends CLSApiTest{
         Assert.assertNotNull(player.getName());
         Assert.assertNotNull(player.getPlayerApiReference());
         Assert.assertNotNull(player.getPlayerKey());
+        Assert.assertNotNull(player.getCountryCode());
 
         String playerKey = player.getPlayerKey();
 
@@ -39,12 +40,14 @@ public class General extends CLSApiTest{
         Assert.assertEquals(player.getName(), player2.getName());
         Assert.assertEquals(player.getPlayerApiReference(), player2.getPlayerApiReference());
         Assert.assertNull(player2.getPlayerKey());
+        Assert.assertEquals(player.getCountryCode(), player2.getCountryCode());
 
         String newName = "TestUser_" + UUID.randomUUID().toString();
-        CLSPlayer player3 = apiContext.UpdatePlayer(player.getPlayerApiReference(), playerKey, newName);
+        CLSPlayer player3 = apiContext.UpdatePlayer(player.getPlayerApiReference(), playerKey, newName, "RU");
         Assert.assertEquals(newName, player3.getName());
         Assert.assertEquals(player.getPlayerApiReference(), player3.getPlayerApiReference());
         Assert.assertNull(player3.getPlayerKey());
+        Assert.assertEquals("RU", player3.getCountryCode());
     }
 
     @Test

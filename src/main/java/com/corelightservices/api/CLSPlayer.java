@@ -10,6 +10,7 @@ public class CLSPlayer extends CLSObject {
     private String playerApiReference;
     private String name;
     private String playerKey;
+    private String countryCode;
 
     private CLSPlayer() {}
 
@@ -19,6 +20,8 @@ public class CLSPlayer extends CLSObject {
         instance.name = object.getString("name");
         if(object.has("playerKey"))
             instance.playerKey = object.getString("playerKey");
+        if(object.has("countryCode"))
+            instance.countryCode = object.getString("countryCode");
         return instance;
     }
 
@@ -41,5 +44,12 @@ public class CLSPlayer extends CLSObject {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return The players country code
+     */
+    public String getCountryCode() {
+        return countryCode;
     }
 }
